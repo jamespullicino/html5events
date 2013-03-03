@@ -43,18 +43,18 @@ var keysDown = {};
 var keyLogger = new Array();
 var keyLoggerCopy = new Array();
 
-var debugKeyLog = document.createElement("select");
-debugKeyLog.size = 20;
-debugKeyLog.multiple = true;
-document.body.appendChild(document.createElement("BR"));
-document.body.appendChild(debugKeyLog);
+//var debugKeyLog = document.createElement("select");
+//debugKeyLog.size = 20;
+//debugKeyLog.multiple = true;
+//document.body.appendChild(document.createElement("BR"));
+//document.body.appendChild(debugKeyLog);
 
 
 function logKey(e)
 {
     keyLogger.push(e);
-    debugKeyLog.add(new Option(e.timeStamp + ":" + e.type + ": Code: " + e.keyCode, 1));
-    debugKeyLog.selectedIndex = debugKeyLog.length-1;
+    //debugKeyLog.add(new Option(e.timeStamp + ":" + e.type + ": Code: " + e.keyCode, 1));
+    //debugKeyLog.selectedIndex = debugKeyLog.length-1;
 }
 
 var dispatchNextKey = function()
