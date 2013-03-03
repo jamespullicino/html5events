@@ -39,11 +39,61 @@ var monstersCaught = 0;
 // Handle keyboard controls
 var keysDown = {};
 
+// Log keyboard events
+var keyLogger = new Array();
+var keyLoggerCopy = new Array();
+
+var debugKeyLog = document.createElement("select");
+debugKeyLog.size = 20;
+debugKeyLog.multiple = true;
+document.body.appendChild(document.createElement("BR"));
+document.body.appendChild(debugKeyLog);
+
+
+function logKey(e)
+{
+    keyLogger.push(e);
+    debugKeyLog.add(new Option(e.timeStamp + ":" + e.type + ": Code: " + e.keyCode, 1));
+    debugKeyLog.selectedIndex = debugKeyLog.length-1;
+}
+
+var dispatchNextKey = function()
+{
+    var e = keyLoggerCopy.pop();
+    
+    window.dispatchEvent(e);
+    
+    var l = keyLoggerCopy.length;
+    if(l > 0)
+     {
+        var nextE = keyLoggerCopy[l-1];
+        var ms = nextE.timeStamp - e.timeStamp;
+        setTimeout(dispatchNextKey, ms);
+     }
+};
+
+var playKeys = function () {
+    Math.seedrandom("skillz");
+    monstersCaught = 0;
+    reset();
+    keyLoggerCopy = keyLogger.splice(0);
+    keyLoggerCopy.reverse();
+    dispatchNextKey();
+};
+
+var playKeyLog = document.createElement("button");
+playKeyLog.innerHTML = "Play Key Log";
+playKeyLog.onclick = playKeys;
+document.body.appendChild(playKeyLog);
+
+
 addEventListener("keydown", function (e) {
-	keysDown[e.keyCode] = true;
+        logKey(e);
+        keysDown[e.keyCode] = true;
 }, false);
 
 addEventListener("keyup", function (e) {
+        logKey(e);
 	delete keysDown[e.keyCode];
 }, false);
 
@@ -117,7 +167,12 @@ var main = function () {
 	then = now;
 };
 
+
+// Set random seed
+Math.seedrandom("skillz");
+
 // Let's play this game!
 reset();
+
 var then = Date.now();
 setInterval(main, 1); // Execute as fast as possible
